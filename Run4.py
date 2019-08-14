@@ -2,7 +2,7 @@ import ROOT
 import math
 
 input_files = "/home/atlas/ATLAS-DataAndTools/Input/Data/DataMuons.root"
-max_events = -1
+max_events = -1 #insert negative number to run all events
 #------------------------------------------------#
 f = ROOT.TFile(input_files)
 t = f.Get("mini;3")   #tree specification
@@ -15,9 +15,9 @@ if max_events < 0:
    max_events = num_events
 
 output_file = ROOT.TFile("output.root","RECREATE")
-#------------------------------------------------#
-h_num = ROOT.TH1F("h_num","",1000,-0.5,4.5) #construct hist
-h_pt  = ROOT.TH1F("h_pt", "",100, 0.0,100.0) #no. of bins, range
+#------------------------------------------------# Histograms
+h_num = ROOT.TH1F("h_num","",1000,-0.5,4.5)
+h_pt  = ROOT.TH1F("h_pt", "",100, 0.0,100.0)
 h_eta = ROOT.TH1F("h_eta","",100,-5.0,  5.0)
 h_phi = ROOT.TH1F("h_phi","",100,-3.2,  3.2)
 h_E   = ROOT.TH1F("h_E","",100, -0.5, 300.0)
@@ -31,7 +31,7 @@ for n in range(max_events):
     if (n % 100000) == 0:
         print "processing event...", n
 
-    lep_n = t.lep_n #no. of preselected leptons in an event
+    lep_n = t.lep_n
 
     if lep_n ==2:
         h_num.Fill(lep_n)
@@ -43,22 +43,17 @@ for n in range(max_events):
 
         if charge[0]!=charge[1]:
 
+            px=[]
+            py=[]
+            pz=[]
             Energy=[]
-            PT=[]
-            PHI=[]
-            ETA=[]
             for i in range(lep_n):
 
-                lep_pt  = t.lep_pt [i]/1000.0
+                lep_pt  = t.lep_pt [i]/1000
                 lep_eta = t.lep_eta[i]
                 lep_phi = t.lep_phi[i]
-                lep_E = t.lep_E[i]/1000.0
+                lep_E = t.lep_E[i]/1000
                 lep_q = t.lep_charge[i]
-
-                Energy.append(lep_E)
-                PT.append(lep_pt)
-                PHI.append(lep_phi)
-                ETA.append(lep_eta)
 
                 h_pt .Fill(lep_pt)
                 h_eta.Fill(lep_eta)
@@ -66,22 +61,24 @@ for n in range(max_events):
                 h_E.Fill(lep_E)
                 h_q.Fill(lep_q)
 
-            p1x=PT[0]*math.cos(PHI[0])*1000
-            p1y=PT[0]*math.sin(PHI[0])*1000
-            p1z=PT[0]*math.sinh(ETA[0])*1000
+                p_x=lep_pt*math.cos(lep_phi)
+                p_y=lep_pt*math.sin(lep_phi)
+                p_z=lep_pt*math.sinh(lep_eta)
 
-            p2x=PT[1]*math.cos(PHI[1])*1000
-            p2y=PT[1]*math.sin(PHI[1])*1000
-            p2z=PT[1]*math.sinh(ETA[1])*1000
+                px.append(p_x)
+                py.append(p_y)
+                pz.append(p_z)
+                Energy.append(lep_E)
 
-            P=[p1x+p2x, p1y+p2y, p1z+p2z]
+            P=[px[0]+px[1], py[0]+py[1], pz[0]+pz[1]]
             P2=[P[0]*P[0], P[1]*P[1], P[2]*P[2]]
             P3=P2[0]+P2[1]+P2[2]
-            E = (Energy[0]+Energy[1])*1000
-            m=math.sqrt(E*E - P3 )/1000
+            E = (Energy[0]+Energy[1])
+            m=math.sqrt(E*E - P3 )
 
             h_mass.Fill(m)
         else:
+            pass
         #    print "charge",charge
         #    print "event no.", n
 
