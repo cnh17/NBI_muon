@@ -71,10 +71,9 @@ for n in range(max_events):
                 Energy.append(lep_E)
 
             P=[px[0]+px[1], py[0]+py[1], pz[0]+pz[1]]
-            P2=[P[0]*P[0], P[1]*P[1], P[2]*P[2]]
-            P3=P2[0]+P2[1]+P2[2]
-            E = (Energy[0]+Energy[1])
-            m=math.sqrt(E*E - P3 )
+            P1=P[0]*P[0] + P[1]*P[1] + P[2]*P[2]
+            E = Energy[0]+Energy[1]
+            m=math.sqrt(E*E - P1)
 
             h_mass.Fill(m)
         else:
