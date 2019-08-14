@@ -2,7 +2,7 @@ import ROOT
 import math
 
 input_files = "/home/atlas/ATLAS-DataAndTools/Input/Data/DataMuons.root"
-max_events = 1000
+max_events = -1
 #------------------------------------------------#
 f = ROOT.TFile(input_files)
 t = f.Get("mini;3")   #tree specification
@@ -14,7 +14,7 @@ print "num events", num_events
 if max_events < 0:
    max_events = num_events
 
-output_file = ROOT.TFile("output2.root","RECREATE")
+output_file = ROOT.TFile("output.root","RECREATE")
 #------------------------------------------------#
 h_num = ROOT.TH1F("h_num","",1000,-0.5,4.5) #construct hist
 h_pt  = ROOT.TH1F("h_pt", "",100, 0.0,100.0) #no. of bins, range
@@ -22,13 +22,13 @@ h_eta = ROOT.TH1F("h_eta","",100,-5.0,  5.0)
 h_phi = ROOT.TH1F("h_phi","",100,-3.2,  3.2)
 h_E   = ROOT.TH1F("h_E","",100, -0.5, 300.0)
 h_q   = ROOT.TH1F("h_q","",196,-1.5, 1.5)
-h_mass= ROOT.TH1F("h_mass","",97, -0.5, 150)
+h_mass= ROOT.TH1F("h_mass","",1000, -0.5, 150)
 #------------------------------------------------#
 for n in range(max_events):
 
     t.GetEntry(n)
 
-    if (n % 100) == 0:
+    if (n % 100000) == 0:
         print "processing event...", n
 
     lep_n = t.lep_n #no. of preselected leptons in an event
@@ -82,8 +82,8 @@ for n in range(max_events):
 
             h_mass.Fill(m)
         else:
-            print "charge",charge
-            print "event no.", n
+        #    print "charge",charge
+        #    print "event no.", n
 
 #------------------------------------------------#
 h_num.Write()
