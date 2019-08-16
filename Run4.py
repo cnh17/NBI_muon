@@ -25,6 +25,7 @@ h_q_mu   = ROOT.TH1F("h_q_mu","Charge of Muons",196,-1.5, 1.5)
 h_mass_mu= ROOT.TH1F("h_mass_mu","Invariant mass (muon)",1000, -0.5, 150)
 h_cut_mu = ROOT.TH1F("h_cut_mu", "Cuts (muon)", 10000, -0.5, 3.5)
 h_type   = ROOT.TH1F("h_type", "Lepton Type", 100, -0.5, 50)
+h_met_mu = ROOT.TH1F("met_mu", "Missing transverse energy", 100, -0.5, 100)
 #------------------------------------------------#
 h_pt_e  = ROOT.TH1F("h_pt_e", "Transverse Momentum of Electrons",100, 0.0,100.0)
 h_eta_e = ROOT.TH1F("h_eta_e","Pseudorapidity of Electrons",100,-5.0,  5.0)
@@ -33,6 +34,7 @@ h_E_e   = ROOT.TH1F("h_E_e","Energy of Electrons",100, -0.5, 300.0)
 h_q_e   = ROOT.TH1F("h_q_e","Charge of Electrons",196,-1.5, 1.5)
 h_mass_e= ROOT.TH1F("h_mass_e","Invariant mass (e)",1000, -0.5, 150)
 h_cut_e = ROOT.TH1F("h_cut_e", "Cuts (e)", 10000, -0.5, 3.5)
+#h_met_e = ROOT.TH1F("met_e", "Missing Transverse energy", 100, -0.5, 100)
 
 #-----------------------------------------------#
 
@@ -48,6 +50,8 @@ for n in range(max_events):
     h_cut_e.Fill(0.0)
     h_num.Fill(lep_n)
 
+    met_et = t.met_et/1000.0
+
     typ=[]
     for i in range(lep_n):
         lep_type = t.lep_type[i]
@@ -59,7 +63,7 @@ for n in range(max_events):
         lep_q = t.lep_charge[i]
         charge.append(lep_q)
 
-    if typ==[13,13]:
+    if typ==[13,13] and met_et < 15:
         h_cut_mu.Fill(1.0)
 
         charge=[]
@@ -77,8 +81,8 @@ for n in range(max_events):
                 lep_pt  = t.lep_pt [i]/1000
                 lep_eta = t.lep_eta[i]
                 lep_phi = t.lep_phi[i]
-                lep_E = t.lep_E[i]/1000
-                lep_q = t.lep_charge[i]
+                lep_E   = t.lep_E[i]/1000
+                lep_q   = t.lep_charge[i]
 
                 h_pt_mu .Fill(lep_pt)
                 h_eta_mu.Fill(lep_eta)
@@ -124,6 +128,7 @@ for n in range(max_events):
                 lep_E = t.lep_E[i]/1000
                 lep_q = t.lep_charge[i]
 
+
                 h_pt_e.Fill(lep_pt)
                 h_eta_e.Fill(lep_eta)
                 h_phi_e.Fill(lep_phi)
@@ -156,6 +161,7 @@ h_q_mu.Write()
 h_mass_mu.Write()
 h_cut_mu.Write()
 h_type.Write()
+h_met_mu.Write()
 
 h_pt_e. Write()
 h_eta_e.Write()
