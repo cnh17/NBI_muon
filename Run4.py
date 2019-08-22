@@ -158,29 +158,30 @@ for n in range(max_events):
             h_mass_e.Fill(m)
             h_cut_e.Fill(2.0) #only oppositely charged electron pairs
 #------------------------------------------------#
-eventnumbers.sort()
-print "no. of event numbers", len(eventnumbers), "Min:", min(eventnumbers), "Max:", max(eventnumbers)
+ ##         DUPLICATION WORK --writing out dupe files      ##
 
-dupes = []
-File1 =  open("MuonsMini3_duplicates.text","w+")
-for n in range(len(eventnumbers)):
-    if (n % 200000) == 0:
-        print "processing event number...", n
-    x = eventnumbers[n]
-    if n+1 < len(eventnumbers):
-        n+=1
-        y = eventnumbers[n]
-    else:
-        y = 0
-    if x==y :
-        dupes.append(x)
-        File1.write("%d \n" % (x) )
+#eventnumbers.sort()
+#print "no. of event numbers", len(eventnumbers), "Min:", min(eventnumbers), "Max:", max(eventnumbers)
 
-print "no. of dupes", len(dupes)
-File1.close()
+#dupes = []
+#File1 =  open("MuonsMini3_duplicates.text","w+")
+#for n in range(len(eventnumbers)):
+#    if (n % 200000) == 0:
+#        print "processing event number...", n
+#    x = eventnumbers[n]
+#    if n+1 < len(eventnumbers):
+#        n+=1
+#        y = eventnumbers[n]
+#    else:
+#        y = 0
+#    if x==y :
+#        dupes.append(x)
+#        File1.write("%d \n" % (x) )
+
+#print "no. of dupes", len(dupes)
+#File1.close()
 
 #----------------------------------------------------
-
 h_num.Write()
 h_pt_mu. Write()
 h_eta_mu.Write()
