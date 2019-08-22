@@ -1,12 +1,12 @@
 import ROOT
 import math
 
-input_files = "/home/atlas/ATLAS-DataAndTools/Input/Data/DataMuons.root"
-max_events = -1 #insert negative number to run all events
+input_path = "/home/atlas/ATLAS-DataAndTools/Input/Data/"
+tree_name   = "mini;3"
+max_events  = -1 #insert negative number to run all events
 #------------------------------------------------#
-f = ROOT.TFile(input_files)
-t = f.Get("mini;3")   #tree specification
-print "tree", t
+t = ROOT.TChain(tree_name)
+t.Add(input_path+"DataMuons.root")
 
 num_events = t.GetEntries()
 print "num events", num_events
@@ -25,7 +25,8 @@ h_q_mu   = ROOT.TH1F("h_q_mu","Charge of Muons",196,-1.5, 1.5)
 h_mass_mu= ROOT.TH1F("h_mass_mu","Invariant mass (muon)",1000, -0.5, 150)
 h_cut_mu = ROOT.TH1F("h_cut_mu", "Cuts (muon)", 10000, -0.5, 3.5)
 h_type   = ROOT.TH1F("h_type", "Lepton Type", 100, -0.5, 50)
-h_met_mu = ROOT.TH1F("met_mu", "Missing transverse energy", 100, -0.5, 100)
+h_met_mu = ROOT.TH1F("h_met_mu", "Missing transverse energy", 100, -0.5, 100)
+h_eventnumber = ROOT.TH1F("h_eventnumber", "Event Number", max_events, -0.5, 126608000)
 #------------------------------------------------#
 h_pt_e  = ROOT.TH1F("h_pt_e", "Transverse Momentum of Electrons",100, 0.0,100.0)
 h_eta_e = ROOT.TH1F("h_eta_e","Pseudorapidity of Electrons",100,-5.0,  5.0)
@@ -34,13 +35,16 @@ h_E_e   = ROOT.TH1F("h_E_e","Energy of Electrons",100, -0.5, 300.0)
 h_q_e   = ROOT.TH1F("h_q_e","Charge of Electrons",196,-1.5, 1.5)
 h_mass_e= ROOT.TH1F("h_mass_e","Invariant mass (e)",1000, -0.5, 150)
 h_cut_e = ROOT.TH1F("h_cut_e", "Cuts (e)", 10000, -0.5, 3.5)
-#h_met_e = ROOT.TH1F("met_e", "Missing Transverse energy", 100, -0.5, 100)
-
+h_met_e = ROOT.TH1F("met_e", "Missing Transverse energy", 100, -0.5, 100)
 #-----------------------------------------------#
 
+eventnumbers =[]
 for n in range(max_events):
 
     t.GetEntry(n)
+    eventnum = t.eventNumber
+    eventnumbers.append(eventnum)
+    h_eventnumber.Fill(t.eventNumber)
 
     if (n % 100000) == 0:
         print "processing event...", n
@@ -65,6 +69,7 @@ for n in range(max_events):
 
     if typ==[13,13] and met_et < 15:
         h_cut_mu.Fill(1.0)
+        h_met_mu.Fill(met_et)
 
         charge=[]
         for i in range(lep_n):
@@ -107,8 +112,9 @@ for n in range(max_events):
             h_mass_mu.Fill(m)
             h_cut_mu.Fill(2.0) #only oppositely charged muon pairs
 
-    elif typ==[11,11]:
+    elif typ==[11,11] and met_et<15:
         h_cut_e.Fill(1.0)
+        h_met_e.Fill(met_et)
 
         charge=[]
         for i in range(lep_n):
@@ -152,6 +158,29 @@ for n in range(max_events):
             h_mass_e.Fill(m)
             h_cut_e.Fill(2.0) #only oppositely charged electron pairs
 #------------------------------------------------#
+eventnumbers.sort()
+print "no. of event numbers", len(eventnumbers), "Min:", min(eventnumbers), "Max:", max(eventnumbers)
+
+dupes = []
+File1 =  open("MuonsMini3_duplicates.text","w+")
+for n in range(len(eventnumbers)):
+    if (n % 200000) == 0:
+        print "processing event number...", n
+    x = eventnumbers[n]
+    if n+1 < len(eventnumbers):
+        n+=1
+        y = eventnumbers[n]
+    else:
+        y = 0
+    if x==y :
+        dupes.append(x)
+        File1.write("%d \n" % (x) )
+
+print "no. of dupes", len(dupes)
+File1.close()
+
+#----------------------------------------------------
+
 h_num.Write()
 h_pt_mu. Write()
 h_eta_mu.Write()
@@ -162,6 +191,7 @@ h_mass_mu.Write()
 h_cut_mu.Write()
 h_type.Write()
 h_met_mu.Write()
+h_eventnumber.Write()
 
 h_pt_e. Write()
 h_eta_e.Write()
@@ -170,6 +200,7 @@ h_E_e.Write()
 h_q_e.Write()
 h_mass_e.Write()
 h_cut_e.Write()
+h_met_e.Write()
 
 output_file.Close()
 ##################################################
