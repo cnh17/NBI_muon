@@ -16,3 +16,6 @@ This is a log of my analysis steps made in the virtual box on my computer.
 
 20/08/19
 - Fourth commit : Contains analysis work on duplication of event numbers.
+
+22/08/19
+- Fifth commit : Finished analysis on duplication work. This commit contains four text files with the duplicate event numbers for both Egamma and Muons data sets and each TTree mini;3 and mini;4.
