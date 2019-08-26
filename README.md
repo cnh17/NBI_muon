@@ -19,3 +19,6 @@ This is a log of my analysis steps made in the virtual box on my computer.
 
 22/08/19
 - Fifth commit : Finished analysis on duplication work. This commit contains four text files with the duplicate event numbers for both Egamma and Muons data sets and each TTree mini;3 and mini;4.
+
+26/08/19
+- Sixth commit : Includes code to make text files with the eventnumbers that produce lepton pairs

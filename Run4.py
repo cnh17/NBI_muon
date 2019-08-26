@@ -6,7 +6,8 @@ tree_name   = "mini;3"
 max_events  = -1 #insert negative number to run all events
 #------------------------------------------------#
 t = ROOT.TChain(tree_name)
-t.Add(input_path+"DataMuons.root")
+t.Add(input_path+"DataEgamma.root")
+#file2 =  open("pairs_egamma.csv","w+")
 
 num_events = t.GetEntries()
 print "num events", num_events
@@ -81,6 +82,7 @@ for n in range(max_events):
             py=[]
             pz=[]
             Energy=[]
+            #file2.write("%d\n" % (eventnum) )
             for i in range(lep_n):
 
                 lep_pt  = t.lep_pt [i]/1000
@@ -126,6 +128,7 @@ for n in range(max_events):
             py=[]
             pz=[]
             Energy=[]
+            #file2.write("%d\n" % (eventnum) )
             for i in range(lep_n):
 
                 lep_pt  = t.lep_pt [i]/1000
@@ -159,27 +162,28 @@ for n in range(max_events):
             h_cut_e.Fill(2.0) #only oppositely charged electron pairs
 #------------------------------------------------#
  ##         DUPLICATION WORK --writing out dupe files      ##
+"""
+eventnumbers.sort()
+print "no. of event numbers", len(eventnumbers), "Min:", min(eventnumbers), "Max:", max(eventnumbers)
 
-#eventnumbers.sort()
-#print "no. of event numbers", len(eventnumbers), "Min:", min(eventnumbers), "Max:", max(eventnumbers)
+dupes = []
+File1 =  open("MuonsMini3_duplicates.text","w+")
+for n in range(len(eventnumbers)):
+    if (n % 200000) == 0:
+        print "processing event number...", n
+    x = eventnumbers[n]
+    if n+1 < len(eventnumbers):
+        n+=1
+        y = eventnumbers[n]
+    else:
+        y = 0
+    if x==y :
+        dupes.append(x)
+        File1.write("%d \n" % (x) )
 
-#dupes = []
-#File1 =  open("MuonsMini3_duplicates.text","w+")
-#for n in range(len(eventnumbers)):
-#    if (n % 200000) == 0:
-#        print "processing event number...", n
-#    x = eventnumbers[n]
-#    if n+1 < len(eventnumbers):
-#        n+=1
-#        y = eventnumbers[n]
-#    else:
-#        y = 0
-#    if x==y :
-#        dupes.append(x)
-#        File1.write("%d \n" % (x) )
-
-#print "no. of dupes", len(dupes)
-#File1.close()
+print "no. of dupes", len(dupes)
+File1.close()
+"""
 
 #----------------------------------------------------
 h_num.Write()
@@ -203,5 +207,7 @@ h_mass_e.Write()
 h_cut_e.Write()
 h_met_e.Write()
 
-output_file.Close()
+file2.close()
+
+#output_file.Close()
 ##################################################
