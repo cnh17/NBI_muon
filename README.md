@@ -24,4 +24,4 @@ This is a log of my analysis steps made in the virtual box on my computer.
 - Sixth commit : Includes code to make text files with the eventnumbers that produce lepton pairs
 
 27/08/19
-- Seventh commit: Inlcudes work on higgs
+- Seventh commit: Includes work on finding Higgs particle mass
