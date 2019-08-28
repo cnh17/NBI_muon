@@ -32,7 +32,7 @@ for n in range(len(evnum)):
     if x==y :
         dupes.append(x)
 print "no. of overlapping Z producing event numbers in two trees:", len(dupes), "event number:", dupes
-print "Verification:"
+print "Verification"
 
 ### verification to check I haven't just found a duplicate pairs in one tree ###
 for n in range(len(ev1)):

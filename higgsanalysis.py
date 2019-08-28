@@ -1,13 +1,12 @@
 import ROOT
 import math
-
+"""
+Script to find potential Higgs particle from event no. 45441783
+"""
 input_path = "/home/atlas/ATLAS-DataAndTools/Input/Data/"
 tree_name   = "mini;3"
 t = ROOT.TChain(tree_name)
 t.Add(input_path+"DataMuons.root")
-
-output_file = ROOT.TFile("output_higgs.root","RECREATE")
-h_mass_h= ROOT.TH1F("h_mass_h","Invariant mass (Higgs)",1000, -0.5, 150)
 
 num_events = t.GetEntries()
 P_z1=[]
@@ -21,6 +20,7 @@ for n in range(num_events):
         py=[]
         pz=[]
         Energy=[]
+        print "Muons = no. of vertices:", t.pvxp_n, "run number", t.runNumber, "no. of jets", t.jet_n
         for i in range(lep_n):
             lep_pt  = t.lep_pt [i]/1000
             lep_eta = t.lep_eta[i]
@@ -59,6 +59,7 @@ for n in range(num_events):
         py=[]
         pz=[]
         Energy=[]
+        print "Egamma = no. of vertices:", t2.pvxp_n, "run number:", t2.runNumber, "no. of jets:", t2.jet_n
         for i in range(lep_n):
             lep_pt  = t2.lep_pt [i]/1000
             lep_eta = t2.lep_eta[i]
@@ -82,11 +83,9 @@ for n in range(num_events):
         E_z2.append(E)
 
 P=[P_z1[0]+P_z2[0], P_z1[1]+P_z2[1], P_z1[2]+P_z2[2]]
+print "Momentum",P
 P1=P[0]*P[0] + P[1]*P[1] + P[2]*P[2]
 E = E_z1[0]+E_z2[0]
+print "Higgs Energy",E
 m=math.sqrt(E*E - P1)
-h_mass_h.Fill(m)
-
-h_mass_h.Write()
-
-output_file.Close()
+print "Higgs mass",m
