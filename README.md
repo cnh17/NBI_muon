@@ -1,7 +1,15 @@
-# NBI_muon
+# Instructions
+- Download small virtual box or ROOT software and data sets by clicking "download" on http://opendata.atlas.cern/index.php
+- run Run.py to create histograms of the lepton properties of the decays in the data sets DataEgamma.root and DataMuons.root.
+  - Specify use of mini;3
+- Histogram of invariant mass refers to Z bosons
 
-This is a log of my analysis steps made in the virtual box on my computer.
+- Folder named DuplicateEventList contains lists of eventnumbers which are considered more than once in the analysis and so should not be considered.
+- Folder named HiggsAnalysis contains csv files with event numbers that have two leptons decaying from a Z boson.
+  - Zpairanalysis.py used to find event with two Z bosons produced in one decay
+  - Higgsanalysis.py attempts to find Higgs invariant mass
 
+# This is a LOG of my analysis steps made in the virtual box on my computer.
 14/08/19
 - First Commit : Working code for producing histogram of invariant mass.
 - Run over all events : Now includes all 680760 events in tree mini;3.
